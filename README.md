@@ -1,7 +1,7 @@
 # Sahil's Dotfiles
 Contains my dotfiles. Currently only my vimrc
 
-## New Linux Machine Setup
+## Vim New Linux Machine Setup
 
 ```bash
 sudo apt update
@@ -24,4 +24,11 @@ ln -s ~/dotfiles/vimrc ~/.vimrc
 # Opens Vim in the background, installs all your plugins, and closes it.
 # Alternatively, just run `:PluginInstall` on frist vim startup
 vim -es -u ~/.vimrc -i NONE -c "PlugInstall" -c "qa"
+```
+## Vim Housekeeping Comamnds
+
+```bash
+:LspStatus
+:LspInstallServer
+:LspUninstallServer server-name
 ```
