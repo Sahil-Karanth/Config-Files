@@ -6,10 +6,10 @@ Contains my dotfiles. Currently only my vimrc
 ```bash
 sudo apt update
 
-# - vim-gtk3: Gives you the version of Vim compiled with '+clipboard'
-# - fzf: The lightning-fast fuzzy finder binary
-# - ripgrep: The backend for your project-wide text searching (:Rg)
-# - xclip: Tells Linux how to talk to your system clipboard
+# - vim-gtk3: Gives the version of Vim compiled with '+clipboard'
+# - fzf: The fuzzy finder binary
+# - ripgrep: The backend for project-wide text searching (:Rg)
+# - xclip: Tells Linux how to talk to the system clipboard
 # - curl, git, unzip: Required for downloading plugins and LSPs
 sudo apt install -y vim-gtk3 fzf ripgrep xclip curl git unzip
 
