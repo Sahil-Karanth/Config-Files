@@ -12,8 +12,21 @@ set completeopt=menuone,noinsert,noselect,preview " Better autocomplete menu
 set timeoutlen=500       " Wait 500ms for mapping sequences (like <leader>ff)
 set ttimeoutlen=10       " Wait only 10ms for key codes (fast escape)
 set clipboard=unnamedplus " Link Vim's unnamed register to the system clipboard
-set showtabline=0        " Never show the top tab/buffer line
+set showtabline=2        " Vscode style file tabs at the top
 let mapleader = " "      " Spacebar is the modern leader key
+
+" --- Indentation ---
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set smartindent      " Automatically inserts extra indents for new code blocks
+
+" --- Visual Ruler ---
+set colorcolumn=120  " Draw a vertical line at 120 characters
+
+set ignorecase " Default to search case-insensitively
+set smartcase  " Automatically switch to case-sensitive if you type a capital letter
 
 " ==============================================================================
 " PLUGIN INSTALLATION (Using vim-plug)
@@ -46,8 +59,8 @@ call plug#begin('~/.vim/plugged')
     " 7. Viewing Registers
     Plug 'junegunn/vim-peekaboo'
 
-    " 8. Theme
-    Plug 'catppuccin/vim', { 'as': 'catppuccin' }
+    " 8. Theme (Swapped to Monokai)
+    Plug 'crusoexia/vim-monokai'
 
     " 9. Start Screen
     Plug 'mhinz/vim-startify'
@@ -62,32 +75,33 @@ call plug#begin('~/.vim/plugged')
     " 12. Git Integration (Gutter Signs)
     Plug 'airblade/vim-gitgutter'
 
+    " 13. Smooth Scrolling
+    Plug 'psliwka/vim-smoothie'
+
 call plug#end()
+
+" ==============================================================================
+" AI INTEGRATION CONFIGURATION
+" ==============================================================================
+
+" Automatically update files modified outside of Vim (like by your AI CLI)
+set autoread
+
+" Trigger the autoread check whenever Vim regains focus or you switch buffers
+augroup AITmuxSync
+    autocmd!
+    autocmd FocusGained,BufEnter,CursorHold,CursorHoldI * if mode() != 'c' | checktime | endif
+augroup END
 
 " ==============================================================================
 " PLUGIN CONFIGURATION
 " ==============================================================================
-
+"
 " --- 1. LSPs (Squiggles & Toggles) ---
 let g:lsp_diagnostics_enabled = 1
 let g:lsp_signs_enabled = 1
 let g:lsp_diagnostics_echo_cursor = 1
-
-let g:warnings_active = 1
-function! ToggleWarnings()
-    if g:warnings_active == 1
-        let g:warnings_active = 0
-        highlight clear LspWarningHighlight
-        highlight link LspWarningText Ignore
-        echo "LSP Warnings: SILENCED"
-    else
-        let g:warnings_active = 1
-        highlight LspWarningHighlight gui=undercurl guisp=Yellow cterm=underline ctermfg=Yellow
-        highlight LspWarningText guifg=Yellow ctermfg=Yellow
-        echo "LSP Warnings: ACTIVE"
-    endif
-endfunction
-nnoremap <leader>td :call ToggleWarnings()<CR>
+let g:lsp_diagnostics_virtual_text_enabled = 0
 
 " --- 2. Sneak (Leap) ---
 let g:sneak#label = 1 
@@ -127,7 +141,35 @@ let g:gitgutter_set_sign_backgrounds = 0
 
 " --- 8. Vim-Airline Configuration ---
 set noshowmode
-let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#enabled = 1
+
+" Tell airline to assign numbers to the top tabs
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+
+" Map <leader>1 through <leader>9 to jump to the respective tab
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+
+" Show number next to the file tabs
+let g:airline#extensions#tabline#buffer_idx_format = {
+      \ '0': '0 ',
+      \ '1': '1 ',
+      \ '2': '2 ',
+      \ '3': '3 ',
+      \ '4': '4 ',
+      \ '5': '5 ',
+      \ '6': '6 ',
+      \ '7': '7 ',
+      \ '8': '8 ',
+      \ '9': '9 '
+      \}
 
 " --- 9. Minimal Native File Tree (Netrw) ---
 let g:netrw_banner = 0        
@@ -157,6 +199,15 @@ vnoremap <leader>d "_d
 nnoremap <leader>o o<Esc>
 nnoremap <leader>O O<Esc>
 
+" Close the current tab (buffer) safely
+nnoremap <leader>bd :bdelete<CR>
+
+" --- Fast Project Searching (Ripgrep Integration) ---
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
+    set grepformat=%f:%l:%c:%m
+endif
+
 " ==============================================================================
 " UI POLISH (Cursor, Numbers, Theme & Highlights)
 " ==============================================================================
@@ -177,20 +228,33 @@ augroup END
 if (has("termguicolors"))
   set termguicolors
 endif
-colorscheme catppuccin_mocha
+colorscheme monokai
 
 " --- Apply Custom Highlights AFTER Theme ---
 highlight LspErrorHighlight gui=undercurl guisp=Red cterm=underline ctermfg=Red
 highlight LspWarningHighlight gui=undercurl guisp=Yellow cterm=underline ctermfg=Yellow
 
-highlight Pmenu guibg=#181825 guifg=#cdd6f4 ctermbg=235 ctermfg=253
-highlight PmenuSel guibg=#313244 guifg=#cdd6f4 gui=bold ctermbg=237 ctermfg=253 cterm=bold
-highlight PmenuSbar guibg=#1e1e2e ctermbg=234
-highlight PmenuThumb guibg=#585b70 ctermbg=240
+" Monokai Popup Menu Colors
+highlight Pmenu guibg=#3E3D32 guifg=#F8F8F2 ctermbg=237 ctermfg=253
+highlight PmenuSel guibg=#49483E guifg=#F8F8F2 gui=bold ctermbg=239 ctermfg=253 cterm=bold
+highlight PmenuSbar guibg=#272822 ctermbg=235
+highlight PmenuThumb guibg=#75715E ctermbg=242
 
-highlight Conceal guifg=#45475a ctermfg=238 guibg=NONE ctermbg=NONE
+" Monokai Conceal (Indent lines etc)
+highlight Conceal guifg=#75715E ctermfg=242 guibg=NONE ctermbg=NONE
 
-highlight GitGutterAdd    guifg=#a6e3a1 ctermfg=Green
-highlight GitGutterChange guifg=#89b4fa ctermfg=Blue
-highlight GitGutterDelete guifg=#f38ba8 ctermfg=Red
-highlight GitGutterChangeDelete guifg=#f9e2af ctermfg=Yellow
+" Monokai GitGutter Colors
+highlight GitGutterAdd    guifg=#A6E22E ctermfg=Green
+highlight GitGutterChange guifg=#66D9EF ctermfg=Blue
+highlight GitGutterDelete guifg=#F92672 ctermfg=Red
+highlight GitGutterChangeDelete guifg=#E6DB74 ctermfg=Yellow
+
+" --- Make Gutter Background Match Main Background ---
+highlight LineNr guibg=NONE ctermbg=NONE
+highlight CursorLineNr guibg=NONE ctermbg=NONE
+highlight SignColumn guibg=NONE ctermbg=NONE
+
+" ==============================================================================
+" AUTO COMMANDS
+" ==============================================================================
+autocmd FileType * setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
