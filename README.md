@@ -1,5 +1,5 @@
-# Sahil's Dotfiles
-Contains my dotfiles. Currently only my vimrc
+# IDE-like Vim
+Because Neovim breaks every month and I care about rock solid stability.
 
 ## Vim New Linux Machine Setup
 
