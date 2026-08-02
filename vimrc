@@ -187,6 +187,14 @@ nnoremap <leader>lh :LspHover<CR>
 nnoremap <leader>la :LspCodeAction<CR>
 nnoremap <leader>rn :LspRename<CR>
 
+" Jump to the next/previous error in the file
+nnoremap ]g :LspNextDiagnostic<CR>
+nnoremap [g :LspPreviousDiagnostic<CR>
+
+" Open a list of all errors in the current file at the bottom of the screen
+nnoremap <leader>le :LspDocumentDiagnostics<CR>
+
+" File things
 nnoremap <leader>ff :Files<CR>
 nnoremap <leader>fg :Rg<CR>
 nnoremap <leader>fb :Buffers<CR>
