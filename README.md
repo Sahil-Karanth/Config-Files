@@ -35,6 +35,10 @@ vim -es -u ~/.vimrc -i NONE -c "PlugInstall" -c "qa"
 *   `<Space> lh` : **H**over (Show documentation/types)
 *   `<Space> la` : Code **A**ction (Quick fixes, auto-imports)
 *   `<Space> rn` : **R**e**n**ame symbol project-wide
+*   `]g`         : Jump to the next error/warning in the file
+*   `[g`         : Jump to the previous error/warning in the file
+*   `<Space> le` : List all **e**rrors in the current document (opens bottom window)
+*   *Note:* To read an error, just leave your cursor on the squiggly line for 0.3 seconds. The message will print at the bottom of the screen.
 
 ### Navigation & FZF
 *   `<Space> e`  : Toggle File Explorer (Netrw tree)
@@ -45,6 +49,12 @@ vim -es -u ~/.vimrc -i NONE -c "PlugInstall" -c "qa"
 *   `Ctrl-j`     : Move down inside FZF search results
 *   `Ctrl-k`     : Move up inside FZF search results
 
+### Netrw (File Explorer) Navigation
+*   `<CR>` (Enter): Expand or collapse a folder inline
+*   `-` (Minus)   : Go up to the parent directory (makes parent the new root)
+*   `gn`          : Zoom into a folder (makes the folder under your cursor the new root)
+*   `u`           : Go back in directory history (undo your last `-` or `gn` jump)
+
 ### Autocomplete (Insert Mode)
 *   `<Tab>` or `<Ctrl-j>`   : Next autocomplete suggestion
 *   `<Shift-Tab>` or `<Ctrl-k>`: Previous autocomplete suggestion
@@ -54,6 +64,10 @@ vim -es -u ~/.vimrc -i NONE -c "PlugInstall" -c "qa"
 *   `gcc`        : Toggle comment on current line (`vim-commentary`)
 *   `gc`         : Toggle comment on visual selection or motion (`vim-commentary`)
 *   `"` or `@`   : Open floating window showing all copied text/registers (`vim-peekaboo`)
+
+### Tab & Buffer Management
+*   `<Space> 1-9`: Jump directly to tab number 1 through 9
+*   `<Space> bd` : **B**uffer **d**elete (Safely close the current tab without closing your split/window)
 
 ### Utilities
 *   `<Space> d`  : Delete text to the "black hole" register (Normal & Visual mode - doesn't overwrite your clipboard)
